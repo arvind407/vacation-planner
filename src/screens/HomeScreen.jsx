@@ -56,7 +56,7 @@ function HomeScreen() {
             Featured Destinations
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Hand-picked locations that promise extraordinary experiences
+            Hand-picked locations that promise extraordinary experience
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -126,7 +126,9 @@ function HomeScreen() {
                 </div>
                 <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                   <span className="text-gray-600 text-sm">Starting from</span>
-                  <span className="text-blue-600 text-xl font-bold">$1,299</span>
+                  <span className="text-blue-600 text-xl font-bold">
+                    $1,299
+                  </span>
                 </div>
               </div>
             </div>
