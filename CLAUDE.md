@@ -40,6 +40,41 @@ npm run preview
 
 Locally preview the production build after running `npm run build`.
 
+## GitHub Integration
+
+GitHub is connected to this project via MCP (Model Context Protocol). You can interact with the repository directly from the conversation:
+
+- **Create issues**: Ask Claude to create GitHub issues for tracking features, bugs, or tasks
+- **Read pull requests**: Ask Claude to list or read PR details without leaving the conversation
+- **Check repository status**: View open issues, PRs, branches, and commits
+- **Push changes**: Commit and push code changes directly to branches
+
+Simply ask in natural language (e.g., "list my open PRs", "create an issue for...", "push my changes") and Claude will handle the GitHub operations.
+
+**Repository**: arvind407/vacation-planner
+
+## Playwright Integration
+
+Playwright is connected to this project via MCP (Model Context Protocol) for automated browser testing and verification. Use it to:
+
+- **Verify screens**: Open http://localhost:5174 in a browser and verify all routes work correctly
+- **Test UI interactions**: Click buttons, fill forms, and verify user flows
+- **Check for errors**: Monitor console logs and identify runtime issues
+- **Visual verification**: Take screenshots and capture page snapshots
+
+### Screen Verification Command
+
+Run `/verify-screens` after any significant change to verify all 5 main routes:
+- Home (/)
+- Explore (/explore)
+- Planner (/planner)
+- Hotels (/hotels)
+- Profile (/profile)
+
+This command automatically opens the application, navigates to each screen, and reports any loading issues, missing elements, or console errors.
+
+**Important**: Make sure the dev server is running (`npm run dev`) before running screen verification.
+
 ## Architecture
 
 ### Tech Stack
