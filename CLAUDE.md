@@ -94,6 +94,23 @@ PascalCase for component files (HomeScreen.jsx), camelCase for hooks(useTrips.js
 
 ### State Management
 
-Use React useState and useContext for now. Do not introduce Redux for now.
+The application uses Context API for shared state management:
+
+- **All shared state lives in src/context/**
+  - UserContext: User profile data (name, email, avatar, etc.)
+  - FavoritesContext: Saved/favorited destinations
+  - TripContext: Current trip planning state
+
+- **Import via hooks from src/hooks/, not directly from context files**
+  - Use `import useUser from '../hooks/useUser'` instead of importing from context directly
+  - Use `import useFavorites from '../hooks/useFavorites'` for favorites functionality
+  - Custom hooks like `useDestinations` and `useTripPlanner` manage data logic and state
+
+- **Screen components call hooks and render only**
+  - No useState or useEffect for data logic directly in screen files
+  - Keep only UI-specific state in screen components (e.g., modal open/closed, form visibility)
+  - All business logic and data management should be in hooks
+
+Do not introduce Redux for now.
 
 The application is ready to be extended with vacation planning features.
