@@ -1,0 +1,25 @@
+{
+  "name": "vacation-planner-api",
+  "version": "1.0.0",
+  "description": "MCP server for vacation planner trip and favorites management",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "vacation-planner-api": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "mcp",
+    "vacation",
+    "planner"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "cors": "^2.8.6",
+    "express": "^5.2.1"
+  }
+}

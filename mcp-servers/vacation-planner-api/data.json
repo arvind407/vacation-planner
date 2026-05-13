@@ -1,0 +1,203 @@
+{
+  "trips": [
+    {
+      "id": 1,
+      "destination": "Paris, France",
+      "startDate": "2024-06-15",
+      "endDate": "2024-06-22",
+      "activities": [
+        [
+          {
+            "id": 1715000001,
+            "name": "Visit Eiffel Tower",
+            "time": "10:00 AM",
+            "description": "Take the elevator to the top for panoramic views of Paris"
+          },
+          {
+            "id": 1715000002,
+            "name": "Lunch at Café de Flore",
+            "time": "1:00 PM",
+            "description": "Historic café in Saint-Germain-des-Prés"
+          },
+          {
+            "id": 1715000003,
+            "name": "Louvre Museum",
+            "time": "3:00 PM",
+            "description": "See the Mona Lisa and other masterpieces"
+          }
+        ],
+        [
+          {
+            "id": 1715000004,
+            "name": "Versailles Palace",
+            "time": "9:00 AM",
+            "description": "Day trip to explore the palace and gardens"
+          }
+        ]
+      ],
+      "createdAt": "2024-05-01T10:30:00.000Z"
+    },
+    {
+      "id": 2,
+      "destination": "Tokyo, Japan",
+      "startDate": "2024-09-10",
+      "endDate": "2024-09-17",
+      "activities": [
+        [
+          {
+            "id": 1715000005,
+            "name": "Senso-ji Temple",
+            "time": "9:00 AM",
+            "description": "Tokyo's oldest and most famous temple in Asakusa"
+          },
+          {
+            "id": 1715000006,
+            "name": "Akihabara District",
+            "time": "2:00 PM",
+            "description": "Explore the famous electronics and anime district"
+          }
+        ],
+        [
+          {
+            "id": 1715000007,
+            "name": "Mount Fuji Day Trip",
+            "time": "7:00 AM",
+            "description": "Full day excursion to see Japan's iconic mountain"
+          }
+        ],
+        [
+          {
+            "id": 1715000008,
+            "name": "Tsukiji Fish Market",
+            "time": "6:00 AM",
+            "description": "Fresh sushi breakfast at the famous fish market"
+          },
+          {
+            "id": 1715000009,
+            "name": "Shibuya Crossing",
+            "time": "11:00 AM",
+            "description": "Experience the world's busiest pedestrian crossing"
+          },
+          {
+            "id": 1715000010,
+            "name": "Meiji Shrine",
+            "time": "2:00 PM",
+            "description": "Peaceful Shinto shrine surrounded by forest"
+          }
+        ]
+      ],
+      "createdAt": "2024-05-05T14:20:00.000Z"
+    },
+    {
+      "id": 3,
+      "destination": "Rome, Italy",
+      "startDate": "2024-11-01",
+      "endDate": "2024-11-05",
+      "activities": [
+        [
+          {
+            "id": 1715000011,
+            "name": "Colosseum Tour",
+            "time": "9:00 AM",
+            "description": "Guided tour of the ancient amphitheater"
+          },
+          {
+            "id": 1715000012,
+            "name": "Roman Forum",
+            "time": "11:30 AM",
+            "description": "Walk through ancient Roman ruins"
+          }
+        ],
+        [
+          {
+            "id": 1715000013,
+            "name": "Vatican Museums",
+            "time": "8:30 AM",
+            "description": "Early entry to see the Sistine Chapel"
+          },
+          {
+            "id": 1715000014,
+            "name": "St. Peter's Basilica",
+            "time": "12:00 PM",
+            "description": "Visit the largest church in the world"
+          }
+        ]
+      ],
+      "createdAt": "2024-05-08T09:15:00.000Z"
+    }
+  ],
+  "favorites": [
+    {
+      "id": 1,
+      "name": "Santorini",
+      "country": "Greece",
+      "category": "beach",
+      "lon": 25.4615,
+      "lat": 36.3932,
+      "addedAt": "2024-04-20T12:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "name": "Machu Picchu",
+      "country": "Peru",
+      "category": "adventure",
+      "lon": -72.545,
+      "lat": -13.1631,
+      "addedAt": "2024-04-22T15:30:00.000Z"
+    },
+    {
+      "id": 3,
+      "name": "Kyoto",
+      "country": "Japan",
+      "category": "city",
+      "lon": 135.7681,
+      "lat": 35.0116,
+      "addedAt": "2024-04-25T10:45:00.000Z"
+    },
+    {
+      "id": 4,
+      "name": "Swiss Alps",
+      "country": "Switzerland",
+      "category": "mountain",
+      "lon": 7.6583,
+      "lat": 46.5197,
+      "addedAt": "2024-04-28T14:20:00.000Z"
+    },
+    {
+      "id": 5,
+      "name": "Bali",
+      "country": "Indonesia",
+      "category": "beach",
+      "lon": 115.092,
+      "lat": -8.3405,
+      "addedAt": "2024-05-01T16:00:00.000Z"
+    },
+    {
+      "id": 6,
+      "name": "Iceland",
+      "country": "Iceland",
+      "category": "adventure",
+      "lon": -19.0208,
+      "lat": 64.9631,
+      "addedAt": "2024-05-03T11:30:00.000Z"
+    },
+    {
+      "id": "515e58480a7625294059aad2bb1d86f64440f00103f90187f1113001000000920305566f6c7065",
+      "name": "Volpe",
+      "category": "tourism",
+      "lon": 12.5731662,
+      "lat": 41.9259679,
+      "addedAt": "2026-05-13T04:37:40.165Z"
+    },
+    {
+      "id": "514d91329875252940599446713381f64440f00103f9016295842c010000009203064d616d6d7574",
+      "name": "Mammut",
+      "category": "tourism",
+      "lon": 12.5731628,
+      "lat": 41.9258179,
+      "addedAt": "2026-05-13T04:37:41.686Z"
+    }
+  ],
+  "nextTripId": 4,
+  "nextFavoriteId": 9
+}

@@ -10,13 +10,32 @@ const filterTypes = [
   { id: 'adventure', label: 'Adventure', icon: '🎒' },
 ]
 
+function SkeletonCard() {
+  return (
+    <div className="bg-white rounded-2xl shadow-md overflow-hidden animate-pulse">
+      <div className="h-64 bg-gray-300"></div>
+      <div className="p-6">
+        <div className="h-6 bg-gray-300 rounded mb-3 w-3/4"></div>
+        <div className="h-4 bg-gray-300 rounded mb-4 w-1/2"></div>
+        <div className="flex justify-between items-center">
+          <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+          <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function DestinationExplorerScreen() {
   const {
+    loading,
+    error,
     activeFilter,
     setActiveFilter,
     searchTerm,
     setSearchTerm,
     filteredDestinations,
+    refetch,
   } = useDestinations()
 
   const { addFavorite, removeFavorite, isFavorite } = useFavorites()
@@ -24,6 +43,24 @@ function DestinationExplorerScreen() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white pt-24">
       <div className="max-w-7xl mx-auto px-8 py-12">
+        {/* Error Banner */}
+        {error && (
+          <div className="mb-8 bg-red-50 border border-red-200 rounded-xl p-6 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">⚠️</span>
+              <div>
+                <h3 className="font-semibold text-red-900">Error Loading Destinations</h3>
+                <p className="text-red-700">{error}</p>
+              </div>
+            </div>
+            <button
+              onClick={refetch}
+              className="px-6 py-2 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors duration-200"
+            >
+              Retry
+            </button>
+          </div>
+        )}
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-5xl font-bold text-gray-900 mb-4 tracking-tight">
@@ -84,24 +121,32 @@ function DestinationExplorerScreen() {
 
         {/* Destination Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredDestinations.map((destination) => (
-            <DestinationCard
-              key={destination.id}
-              destination={destination}
-              isFavorite={isFavorite(destination.id)}
-              onToggleFavorite={() => {
-                if (isFavorite(destination.id)) {
-                  removeFavorite(destination.id)
-                } else {
-                  addFavorite(destination)
-                }
-              }}
-            />
-          ))}
+          {loading ? (
+            // Show 6 skeleton cards while loading
+            Array.from({ length: 6 }).map((_, index) => (
+              <SkeletonCard key={index} />
+            ))
+          ) : (
+            // Show actual destination cards
+            filteredDestinations.map((destination) => (
+              <DestinationCard
+                key={destination.id}
+                destination={destination}
+                isFavorite={isFavorite(destination.id)}
+                onToggleFavorite={() => {
+                  if (isFavorite(destination.id)) {
+                    removeFavorite(destination.id)
+                  } else {
+                    addFavorite(destination)
+                  }
+                }}
+              />
+            ))
+          )}
         </div>
 
         {/* No Results */}
-        {filteredDestinations.length === 0 && (
+        {!loading && filteredDestinations.length === 0 && (
           <div className="text-center py-20">
             <div className="text-6xl mb-4">🔍</div>
             <h3 className="text-2xl font-bold text-gray-900 mb-2">

@@ -75,6 +75,63 @@ This command automatically opens the application, navigates to each screen, and 
 
 **Important**: Make sure the dev server is running (`npm run dev`) before running screen verification.
 
+## Vacation Planner API
+
+The project includes a custom MCP server that provides both MCP tools and HTTP REST API endpoints for managing trips and favorites. The server is located at `mcp-servers/vacation-planner-api/`.
+
+### Running the API Server
+
+```bash
+node mcp-servers/vacation-planner-api/index.js
+```
+
+This starts both:
+- **Express HTTP server** on `http://localhost:3001` (configurable via PORT env variable)
+- **MCP server** on stdio for Claude integration
+
+The server uses a JSON file (`mcp-servers/vacation-planner-api/data.json`) for data persistence.
+
+### HTTP API Endpoints
+
+**Trips:**
+- `GET /trips` - Get all trips
+- `GET /trips/:id` - Get a specific trip
+- `POST /trips` - Create a new trip
+  - Body: `{ destination, startDate, endDate }`
+- `POST /trips/:id/activities` - Add activity to a trip
+  - Body: `{ dayIndex, activity: { name, time?, description? } }`
+
+**Favorites:**
+- `GET /favorites` - Get all favorites
+- `POST /favorites` - Add a favorite
+  - Body: `{ destination: { name, country?, category?, lon?, lat? } }`
+- `DELETE /favorites/:id` - Remove a favorite
+
+### MCP Tools
+
+The server provides the following MCP tools for Claude to interact with:
+- `get_all_trips` - Retrieve all vacation trips
+- `get_trip` - Get a specific trip by ID
+- `create_trip` - Create a new vacation trip
+- `add_activity` - Add an activity to a specific day of a trip
+- `get_favorites` - Get all favorite destinations
+- `add_favorite` - Add a destination to favorites
+- `remove_favorite` - Remove a destination from favorites
+
+### React App Integration
+
+The React app contexts are connected to the HTTP API:
+
+- **TripContext** (`src/context/TripContext.jsx`) - Fetches trips from `http://localhost:3001/trips`
+  - Automatically loads all trips on mount
+  - Provides methods: `fetchTrips()`, `fetchTrip(id)`, `createTrip(data)`, `addActivity(tripId, dayIndex, activity)`
+
+- **FavoritesContext** (`src/context/FavoritesContext.jsx`) - Fetches favorites from `http://localhost:3001/favorites`
+  - Automatically loads all favorites on mount
+  - Provides methods: `fetchFavorites()`, `addFavorite(destination)`, `removeFavorite(id)`, `isFavorite(id)`
+
+**Important**: The API server must be running for the React app to fetch data properly. Both servers (Vite dev server and API server) should run simultaneously during development.
+
 ## Architecture
 
 ### Tech Stack
@@ -129,22 +186,28 @@ PascalCase for component files (HomeScreen.jsx), camelCase for hooks(useTrips.js
 
 ### State Management
 
-The application uses Context API for shared state management:
+The application uses Context API for shared state management with backend API integration:
 
 - **All shared state lives in src/context/**
-  - UserContext: User profile data (name, email, avatar, etc.)
-  - FavoritesContext: Saved/favorited destinations
-  - TripContext: Current trip planning state
+  - **UserContext**: User profile data (name, email, avatar, etc.) - local state
+  - **FavoritesContext**: Favorite destinations - fetches from `http://localhost:3001/favorites`
+  - **TripContext**: Trip planning and management - fetches from `http://localhost:3001/trips`
 
 - **Import via hooks from src/hooks/, not directly from context files**
   - Use `import useUser from '../hooks/useUser'` instead of importing from context directly
   - Use `import useFavorites from '../hooks/useFavorites'` for favorites functionality
+  - Use `import { useTrip } from '../context/TripContext'` for trip management
   - Custom hooks like `useDestinations` and `useTripPlanner` manage data logic and state
 
 - **Screen components call hooks and render only**
   - No useState or useEffect for data logic directly in screen files
   - Keep only UI-specific state in screen components (e.g., modal open/closed, form visibility)
   - All business logic and data management should be in hooks
+
+- **API-connected contexts provide loading and error states**
+  - Both TripContext and FavoritesContext expose `loading` and `error` states
+  - Handle loading states in UI components for better user experience
+  - All API methods are async and should be used with try/catch or .then/.catch
 
 Do not introduce Redux for now.
 

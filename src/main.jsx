@@ -18,5 +18,5 @@ createRoot(document.getElementById('root')).render(
         </TripProvider>
       </FavoritesProvider>
     </UserProvider>
-  </StrictMode>,
+  </StrictMode>
 )
