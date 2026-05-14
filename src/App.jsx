@@ -16,6 +16,7 @@ function App() {
         <Route path="/explore" element={<DestinationExplorerScreen />} />
         <Route path="/planner" element={<TripPlannerScreen />} />
         <Route path="/hotels" element={<HotelDetailScreen />} />
+        <Route path="/hotels/:id" element={<HotelDetailScreen />} />
         <Route path="/profile" element={<UserProfileScreen />} />
       </Routes>
     </>

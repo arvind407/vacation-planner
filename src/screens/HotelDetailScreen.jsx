@@ -1,55 +1,50 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { getDestinationDetails } from '../api/destinations.js'
 import HotelCard from '../components/HotelCard.jsx'
 
-const hotelData = {
-  name: 'Grand Luxury Hotel & Spa',
-  location: 'Downtown Paris, France',
-  rating: 4.8,
-  reviewCount: 342,
-  description:
-    'Experience luxury and comfort in the heart of Paris. Our hotel features elegant rooms with modern amenities, a world-class spa, and stunning views of the city. Perfect for both business and leisure travelers.',
-  pricePerNight: 299,
-  images: [
-    'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200',
-    'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1200',
-    'https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=1200',
-    'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1200',
-  ],
-  amenities: [
-    { name: 'Swimming Pool', icon: 'pool' },
-    { name: 'Free WiFi', icon: 'wifi' },
-    { name: 'Free Parking', icon: 'parking' },
-    { name: 'Breakfast Included', icon: 'breakfast' },
-    { name: 'Fitness Center', icon: 'fitness' },
-    { name: 'Room Service', icon: 'service' },
-  ],
-  reviews: [
-    {
-      id: 1,
-      author: 'Sarah Johnson',
-      rating: 5,
-      date: 'March 2024',
-      comment:
-        'Absolutely wonderful stay! The staff was incredibly friendly and the room was spotless. The location is perfect for exploring the city.',
-    },
-    {
-      id: 2,
-      author: 'Michael Chen',
-      rating: 4,
-      date: 'February 2024',
-      comment:
-        'Great hotel with excellent amenities. The breakfast buffet was fantastic. Only minor issue was some noise from the street, but overall highly recommend.',
-    },
-    {
-      id: 3,
-      author: 'Emma Williams',
-      rating: 5,
-      date: 'January 2024',
-      comment:
-        'Best hotel experience in Paris! The spa was amazing and the views from our room were breathtaking. Will definitely return.',
-    },
-  ],
-}
+const mockImages = [
+  'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200',
+  'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1200',
+  'https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=1200',
+  'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1200',
+]
+
+const mockAmenities = [
+  { name: 'Swimming Pool', icon: 'pool' },
+  { name: 'Free WiFi', icon: 'wifi' },
+  { name: 'Free Parking', icon: 'parking' },
+  { name: 'Breakfast Included', icon: 'breakfast' },
+  { name: 'Fitness Center', icon: 'fitness' },
+  { name: 'Room Service', icon: 'service' },
+]
+
+const mockReviews = [
+  {
+    id: 1,
+    author: 'Sarah Johnson',
+    rating: 5,
+    date: 'March 2024',
+    comment:
+      'Absolutely wonderful stay! The staff was incredibly friendly and the room was spotless. The location is perfect for exploring the city.',
+  },
+  {
+    id: 2,
+    author: 'Michael Chen',
+    rating: 4,
+    date: 'February 2024',
+    comment:
+      'Great hotel with excellent amenities. The breakfast buffet was fantastic. Only minor issue was some noise from the street, but overall highly recommend.',
+  },
+  {
+    id: 3,
+    author: 'Emma Williams',
+    rating: 5,
+    date: 'January 2024',
+    comment:
+      'Best hotel experience in Paris! The spa was amazing and the views from our room were breathtaking. Will definitely return.',
+  },
+]
 
 const amenityIcons = {
   pool: (
@@ -115,18 +110,96 @@ const amenityIcons = {
 }
 
 function HotelDetailScreen() {
+  const { id } = useParams()
+  const [destination, setDestination] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+
+  useEffect(() => {
+    async function loadDestination() {
+      try {
+        setLoading(true)
+        setError(null)
+        const data = await getDestinationDetails(id)
+        setDestination(data)
+      } catch (err) {
+        setError(err.message || 'Failed to load destination details')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    if (id) {
+      loadDestination()
+    } else {
+      // No ID provided - show sample/mock destination
+      setLoading(false)
+      setDestination({
+        name: 'Grand Luxury Hotel & Spa',
+        address: 'Downtown Paris, France',
+        description:
+          'Experience luxury and comfort in the heart of Paris. Our hotel features elegant rooms with modern amenities, a world-class spa, and stunning views of the city. Perfect for both business and leisure travelers.',
+      })
+    }
+  }, [id])
 
   const nextImage = () => {
     setCurrentImageIndex((prev) =>
-      prev === hotelData.images.length - 1 ? 0 : prev + 1
+      prev === mockImages.length - 1 ? 0 : prev + 1
     )
   }
 
   const prevImage = () => {
     setCurrentImageIndex((prev) =>
-      prev === 0 ? hotelData.images.length - 1 : prev - 1
+      prev === 0 ? mockImages.length - 1 : prev - 1
     )
+  }
+
+  // Loading spinner
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-24 pb-12 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gray-300 border-t-blue-600 mb-4"></div>
+          <p className="text-gray-600 text-lg">Loading destination details...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Error message
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-24 pb-12">
+        <div className="max-w-6xl mx-auto px-8">
+          <div className="bg-red-50 border border-red-200 rounded-xl p-8 text-center">
+            <div className="text-5xl mb-4">⚠️</div>
+            <h2 className="text-2xl font-bold text-red-900 mb-2">Error Loading Destination</h2>
+            <p className="text-red-700 mb-6">{error}</p>
+            <button
+              onClick={() => window.history.back()}
+              className="px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition-colors"
+            >
+              Go Back
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Create hotelData object from destination data
+  const hotelData = {
+    name: destination.name,
+    location: destination.address,
+    rating: 4.5,
+    reviewCount: 128,
+    description: destination.description,
+    pricePerNight: 299,
+    images: mockImages,
+    amenities: mockAmenities,
+    reviews: mockReviews,
   }
 
   return (
@@ -136,8 +209,8 @@ function HotelDetailScreen() {
         <div className="mb-8">
           <div className="relative h-96 bg-gray-200 rounded-lg overflow-hidden">
             <img
-              src={hotelData.images[currentImageIndex]}
-              alt={`Hotel view ${currentImageIndex + 1}`}
+              src={mockImages[currentImageIndex]}
+              alt={`${hotelData.name} view ${currentImageIndex + 1}`}
               className="w-full h-full object-cover"
             />
 
@@ -181,7 +254,7 @@ function HotelDetailScreen() {
 
             {/* Navigation Dots */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-              {hotelData.images.map((_, index) => (
+              {mockImages.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentImageIndex(index)}
@@ -208,7 +281,7 @@ function HotelDetailScreen() {
                 Amenities
               </h2>
               <div className="grid grid-cols-2 gap-4">
-                {hotelData.amenities.map((amenity, index) => (
+                {mockAmenities.map((amenity, index) => (
                   <div key={index} className="flex items-center gap-3">
                     <div className="text-gray-700">
                       {amenityIcons[amenity.icon]}
@@ -225,7 +298,7 @@ function HotelDetailScreen() {
                 Guest Reviews
               </h2>
               <div className="space-y-6">
-                {hotelData.reviews.map((review) => (
+                {mockReviews.map((review) => (
                   <div key={review.id} className="border-b border-gray-200 pb-6 last:border-0 last:pb-0">
                     <div className="flex items-center justify-between mb-2">
                       <div>
