@@ -53,6 +53,8 @@ Simply ask in natural language (e.g., "list my open PRs", "create an issue for..
 
 **Repository**: arvind407/vacation-planner
 
+**Important**: GitHub MCP server must be running and configured for skills to work properly.
+
 ## Playwright Integration
 
 Playwright is connected to this project via MCP (Model Context Protocol) for automated browser testing and verification. Use it to:
@@ -73,7 +75,92 @@ Run `/verify-screens` after any significant change to verify all 5 main routes:
 
 This command automatically opens the application, navigates to each screen, and reports any loading issues, missing elements, or console errors.
 
-**Important**: Make sure the dev server is running (`npm run dev`) before running screen verification.
+**Important**:
+- Make sure the dev server is running (`npm run dev`) before running screen verification.
+- Playwright MCP server must be running and configured for skills to work properly.
+
+## Skills and Quality Gates
+
+### Skills
+
+The project includes custom Claude Code skills located in `./.claude/skills/`. These skills provide specialized workflows and automation for common development tasks.
+
+**Available Skills:**
+
+#### `/review-component [file-path]`
+Performs a comprehensive code review on a React component, hook, or screen file against project standards. Reviews 9 quality criteria including component structure, hooks usage, state management, performance, accessibility, and more. Automatically creates a GitHub issue if problems are found.
+
+Usage:
+- `/review-component src/screens/HomeScreen.jsx` - Review a specific component
+- Ask: "Review the TripContext component"
+
+#### `/format-code [file-path]`
+Automatically formats code using Prettier and fixes linting issues with ESLint. Works on individual files or all recently changed files. Auto-fixes everything possible and reports what needs manual attention.
+
+Usage:
+- `/format-code` - Format all recently changed files (git diff)
+- `/format-code src/components/Button.jsx` - Format a specific file
+- Ask: "Format my code" or "Run Prettier and ESLint"
+
+Handles all file types: JavaScript, JSX, CSS, JSON, Markdown, HTML
+
+#### `/build-tests [file-path]`
+Automatically generates a comprehensive Vitest unit test suite for React components or custom hooks. Analyzes the source file and creates tests covering happy path, edge cases, error states, user interactions, and conditional rendering. The generated test file is immediately runnable.
+
+Usage:
+- `/build-tests src/screens/HomeScreen.jsx` - Generate tests for a component
+- `/build-tests src/hooks/useDestinations.js` - Generate tests for a custom hook
+- Ask: "Generate tests for the TripContext component"
+
+The skill creates tests for:
+- Rendering (initial state, props, default values)
+- User interactions (clicks, form inputs, keyboard events)
+- Conditional rendering (loading, error, empty states)
+- Edge cases (null, undefined, empty arrays)
+- Async operations (API calls, loading states)
+
+#### `/ada-verify [screen-name or route]`
+Check screens for WCAG 2.1 Level AA accessibility compliance using live browser inspection. This skill uses Playwright MCP to open the running app and inspect the actual rendered DOM, catching accessibility issues that only appear after React renders the component.
+
+Usage:
+- `/ada-verify HomeScreen` - Check HomeScreen accessibility
+- `/ada-verify /hotels/123` - Check HotelDetailScreen with ID
+- `/ada-verify` - Prompts you to select a screen
+- Ask: "Check the Planner screen for accessibility issues"
+
+The skill checks:
+- **Perceivable:** Alt text, color contrast, text alternatives, semantic structure
+- **Operable:** Keyboard navigation, focus indicators, touch targets, skip links
+- **Understandable:** Labels, error messages, consistent navigation, language attributes
+- **Robust:** Valid HTML, proper ARIA usage, compatibility
+
+Generates a comprehensive report with:
+- Critical issues (must fix immediately)
+- High priority issues (should fix soon)
+- Medium/low priority issues (consider for backlog)
+- Specific code examples showing how to fix each issue
+- Automatically creates GitHub issue if critical violations found
+
+**Important:** The dev server must be running (`npm run dev`) before using this skill.
+
+**Important**: Skills depend on GitHub MCP and Playwright MCP servers. Ensure both servers are running and properly configured in your Claude configuration before using skills.
+
+### Quality Gate
+
+**Before merging any Pull Request**, always run the quality gate check:
+
+```
+/quality-gate
+```
+
+This command performs comprehensive checks including:
+- Running tests
+- Verifying all screens load correctly
+- Checking for console errors
+- Validating build succeeds
+- Running linter
+
+**Never merge a PR without running the quality gate first.** This ensures code quality and prevents breaking changes from reaching the main branch.
 
 ## Vacation Planner API
 
