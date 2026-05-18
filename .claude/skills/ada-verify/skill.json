@@ -1,0 +1,6 @@
+{
+  "name": "ada-verify",
+  "description": "Check screens for WCAG 2.1 accessibility compliance using live browser inspection",
+  "version": "1.0.0",
+  "when": "project"
+}
